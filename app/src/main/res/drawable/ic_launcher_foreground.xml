@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 外圈：科技感脉冲皮层光环与神经节点 (外圈装饰) -->
+    <path
+        android:pathData="M54,22 C71.67,22 86,36.33 86,54 C86,71.67 71.67,86 54,86 C36.33,86 22,71.67 22,54 C22,36.33 36.33,22 54,22 Z"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.25"
+        android:strokeColor="#FF38BDF8" />
+
+    <!-- 外部三向皮层折叠叶片 / 神经元突触外壳 (左上、右上、下方三瓣对称几何) -->
+    <!-- 左翼皮层瓣 -->
+    <path
+        android:pathData="M54,32 L36,42.5 L36,65.5 L54,76 L48,62 L42,54 L48,46 Z"
+        android:strokeAlpha="0.9"
+        android:strokeColor="#FF0284C7"
+        android:strokeWidth="1">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="36"
+                android:startY="42"
+                android:endX="54"
+                android:endY="76"
+                android:startColor="#FF0284C7"
+                android:endColor="#FF1E1B4B" />
+        </aapt:attr>
+    </path>
+
+    <!-- 右翼皮层瓣 -->
+    <path
+        android:pathData="M54,32 L72,42.5 L72,65.5 L54,76 L60,62 L66,54 L60,46 Z"
+        android:strokeAlpha="0.9"
+        android:strokeColor="#FF38BDF8"
+        android:strokeWidth="1">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="72"
+                android:startY="42"
+                android:endX="54"
+                android:endY="76"
+                android:startColor="#FF38BDF8"
+                android:endColor="#FF312E81" />
+        </aapt:attr>
+    </path>
+
+    <!-- 顶部神经核汇聚点 -->
+    <path
+        android:pathData="M54,32 L60,46 L54,42 L48,46 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="48"
+                android:startY="32"
+                android:endX="60"
+                android:endY="46"
+                android:startColor="#FFBAE6FD"
+                android:endColor="#FF38BDF8" />
+        </aapt:attr>
+    </path>
+
+    <!-- 主脑核心：晶体多面体核心 (Diamond Core) -->
+    <path
+        android:pathData="M54,38 L67,54 L54,70 L41,54 Z"
+        android:strokeAlpha="0.8"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="0.8">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="41"
+                android:startY="38"
+                android:endX="67"
+                android:endY="70"
+                android:startColor="#FF0EA5E9"
+                android:endColor="#FF6366F1" />
+        </aapt:attr>
+    </path>
+
+    <!-- 核心高光小晶体 (内层高亮发光节点) -->
+    <path
+        android:pathData="M54,45 L61,54 L54,63 L47,54 Z"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="0.5">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="54"
+                android:centerY="53"
+                android:gradientRadius="10"
+                android:startColor="#FFFFFFFF"
+                android:endColor="#FF38BDF8" />
+        </aapt:attr>
+    </path>
+
+    <!-- 神经突触能量脉冲点 (6个顶点) -->
+    <!-- 顶 -->
+    <path
+        android:pathData="M54,22m-2.5,0a2.5,2.5 0 1,0 5,0a2.5,2.5 0 1,0 -5,0"
+        android:fillColor="#FF38BDF8" />
+    <path
+        android:pathData="M54,22m-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0"
+        android:fillColor="#FFFFFFFF" />
+
+    <!-- 左上 -->
+    <path
+        android:pathData="M26.3,38m-2,0a2,2 0 1,0 4,0a2,2 0 1,0 -4,0"
+        android:fillColor="#FF0284C7" />
+
+    <!-- 右上 -->
+    <path
+        android:pathData="M81.7,38m-2,0a2,2 0 1,0 4,0a2,2 0 1,0 -4,0"
+        android:fillColor="#FF38BDF8" />
+
+    <!-- 左下 -->
+    <path
+        android:pathData="M26.3,70m-2,0a2,2 0 1,0 4,0a2,2 0 1,0 -4,0"
+        android:fillColor="#FF6366F1" />
+
+    <!-- 右下 -->
+    <path
+        android:pathData="M81.7,70m-2,0a2,2 0 1,0 4,0a2,2 0 1,0 -4,0"
+        android:fillColor="#FF818CF8" />
+
+    <!-- 底 -->
+    <path
+        android:pathData="M54,86m-2.5,0a2.5,2.5 0 1,0 5,0a2.5,2.5 0 1,0 -5,0"
+        android:fillColor="#FF6366F1" />
+    <path
+        android:pathData="M54,86m-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0"
+        android:fillColor="#FFFFFFFF" />
+
+</vector>

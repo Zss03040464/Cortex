@@ -1,0 +1,85 @@
+#!/bin/bash
+# ==============================================================================
+# Agy CLI 环境变量注入与守护管理器
+# 部署路径: /usr/local/bin/agy-wrapper (Debian chroot 内)
+# 作用:
+#   1. 自动探测并接入手机本机代理 (如 FlClash 127.0.0.1:7890)，实现手机独立联网；
+#   2. 配置 no_proxy="localhost,127.0.0.1"，确保与 Eta 宿主 MCP HTTP 服务的环回通信不被拦截；
+#   3. 自动连接本机 ADB (127.0.0.1:5555)；
+#   4. 自动拉起/复用 D-Bus Session 守护进程 (/tmp/dbus-agy-sock)；
+#   5. 自动解锁并维护 gnome-keyring，确保 Antigravity OAuth Token 免密码静默可用；
+#   6. 自动导出账户信息至 account_info.json 供 Eta UI 展示；
+#   7. 支持动态工作区目录 ($AGY_WORKSPACE) 调度；
+#   8. 最终转交控制权至官方 /usr/local/bin/agy.real。
+# ==============================================================================
+
+# 1. 代理配置：优先直接使用手机本机 FlClash (127.0.0.1:7890)
+if (exec 3<>/dev/tcp/127.0.0.1/7890) 2>/dev/null; then
+    exec 3>&-
+    export http_proxy="http://127.0.0.1:7890"
+    export https_proxy="http://127.0.0.1:7890"
+    export HTTP_PROXY="http://127.0.0.1:7890"
+    export HTTPS_PROXY="http://127.0.0.1:7890"
+fi
+
+# 关键：豁免环回地址，防止本地 MCP 流量被 VPN 代理劫持
+export no_proxy="localhost,127.0.0.1"
+export NO_PROXY="localhost,127.0.0.1"
+
+# 2. 本地 ADB 默认目标与连接保障
+adb connect 127.0.0.1:5555 >/dev/null 2>&1
+export ANDROID_SERIAL="127.0.0.1:5555"
+
+# 3. D-Bus 与 GNOME Keyring 守护状态管理
+SOCKET="/tmp/dbus-agy-sock"
+PIDFILE="/tmp/dbus-agy.pid"
+export DBUS_SESSION_BUS_ADDRESS="unix:path=$SOCKET"
+
+if [ ! -e "$SOCKET" ] || ! secret-tool lookup service gemini username antigravity >/dev/null 2>&1; then
+    kill -9 $(cat "$PIDFILE" 2>/dev/null) 2>/dev/null
+    rm -f "$SOCKET" "$PIDFILE"
+    dbus-daemon --session --fork --address="unix:path=$SOCKET" --print-pid 3 3>"$PIDFILE"
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=$SOCKET"
+    eval $(echo -n "eta" | gnome-keyring-daemon --daemonize --login --components=secrets 2>/dev/null)
+    eval $(echo -n "eta" | gnome-keyring-daemon --unlock --components=secrets 2>/dev/null)
+    TOKEN_FILE="/root/.gemini/jetski-standalone-oauth-token"
+    if [ -f "$TOKEN_FILE" ]; then
+        cat "$TOKEN_FILE" | secret-tool store --label="Antigravity Token" service gemini username antigravity 2>/dev/null
+    fi
+fi
+
+# 3.5 自动保鲜：在后台静默异步探测与刷新 Google OAuth 凭据，不阻塞前台启动
+(/usr/bin/python3 /usr/local/bin/switch_account ensure_fresh >/dev/null 2>&1 &)
+
+# 3.6 确保导出当前登录账号信息至 account_info.json，便于 Eta 界面读取（后台异步）
+if [ ! -f /root/.gemini/account_info.json ]; then
+    (/usr/bin/python3 -c "
+import json, base64, subprocess, os
+env = os.environ.copy()
+env['DBUS_SESSION_BUS_ADDRESS'] = 'unix:path=/tmp/dbus-agy-sock'
+try:
+    res = subprocess.check_output(['secret-tool', 'lookup', 'service', 'gemini', 'username', 'antigravity'], env=env).decode()
+    data = json.loads(res)
+    id_token = data.get('id_token', '')
+    parts = id_token.split('.')
+    if len(parts) >= 2:
+        payload = parts[1] + '==='
+        claims = json.loads(base64.urlsafe_b64decode(payload.encode()[:len(payload) - (len(payload) % 4)]).decode())
+        email = claims.get('email', '')
+        name = claims.get('name', '')
+        with open('/root/.gemini/account_info.json', 'w') as f:
+            json.dump({'email': email, 'name': name}, f, indent=2)
+        os.chmod('/root/.gemini/account_info.json', 0o644)
+except Exception:
+    pass
+" >/dev/null 2>&1 &)
+fi
+
+# 4. 工作区目录调度：优先进入动态指定的工作目录，若未指定或不存在则默认进入 /root
+if [ -n "$AGY_WORKSPACE" ] && [ -d "$AGY_WORKSPACE" ]; then
+    cd "$AGY_WORKSPACE"
+else
+    cd /root
+fi
+
+exec /usr/local/bin/agy.real "$@"

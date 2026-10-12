@@ -1,0 +1,16 @@
+# Jetski / Antigravity Standalone OAuth Token Template
+#
+# 位置: /root/.config/antigravity/jetski-standalone-oauth-token (在 Debian chroot 内部)
+# 或 /data/local/tmp/jetski-standalone-oauth-token (通过 agy-wrapper 自动同步注入)
+#
+# 格式说明:
+# 该文件由 Agy / Antigravity CLI 登录成功后产生，包含 Google OAuth 2.0 凭据。
+# 在无头 Debian chroot 环境下，可直接将已授权机器上的 token 文件拷贝至此路径使用。
+#
+# 示例 JSON 结构:
+{
+  "access_token": "YOUR_ACCESS_TOKEN",
+  "refresh_token": "YOUR_REFRESH_TOKEN",
+  "token_type": "Bearer",
+  "expiry": "2026-10-01T00:00:00.000000Z"
+}

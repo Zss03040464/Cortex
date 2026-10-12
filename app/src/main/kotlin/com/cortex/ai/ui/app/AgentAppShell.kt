@@ -1,6 +1,7 @@
 package com.cortex.ai.ui.app
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -276,22 +277,33 @@ private fun AgentTopBar(
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .background(MiuixTheme.colorScheme.surfaceContainerHigh)
+                            .background(MiuixTheme.colorScheme.primary.copy(alpha = 0.08f))
+                            .border(
+                                width = 0.5.dp,
+                                color = MiuixTheme.colorScheme.primary.copy(alpha = 0.35f),
+                                shape = RoundedCornerShape(8.dp),
+                            )
                             .clickable(onClick = onOpenConversationPane)
                             .padding(horizontal = 10.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .size(6.dp)
+                                .clip(androidx.compose.foundation.shape.CircleShape)
+                                .background(Color(0xFF10B981))
+                        )
                         Icon(
                             imageVector = Icons.Rounded.Folder,
                             contentDescription = null,
                             tint = MiuixTheme.colorScheme.primary,
-                            modifier = Modifier.size(14.dp),
+                            modifier = Modifier.size(13.dp),
                         )
                         Text(
                             text = "$displayProj · $displayPath",
                             style = MiuixTheme.textStyles.footnote2,
-                            color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                            color = MiuixTheme.colorScheme.primary,
                             fontWeight = FontWeight.Medium,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,

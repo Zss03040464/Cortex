@@ -38,10 +38,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.DocumentScanner
 import androidx.compose.material.icons.rounded.Language
+import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.RocketLaunch
 import androidx.compose.material.icons.rounded.Terminal
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import com.cortex.ai.ui.cortex.CortexTheme
+import com.cortex.ai.ui.cortex.textSecondary
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -982,27 +988,32 @@ private fun EmptyChatState(
     onSuggestionClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val palette = CortexTheme.palette
     val isCharacterConversation = characterName != null
     val suggestions = listOf(
         SuggestionItem(
-            title = stringResource(R.string.ui_analyze_current_screen_ebf08f),
+            title = "全景界面感知",
+            subtitle = "物理主屏分析与规划",
             icon = Icons.Rounded.DocumentScanner,
             prompt = stringResource(R.string.suggestion_analyze_screen_prompt),
         ),
         SuggestionItem(
-            title = stringResource(R.string.ui_open_wechat_6b2c28),
-            icon = Icons.Rounded.RocketLaunch,
+            title = "Mirage 离屏副屏",
+            subtitle = "独立虚拟副屏后台执行",
+            icon = Icons.Rounded.Layers,
             prompt = stringResource(R.string.suggestion_open_wechat_prompt),
         ),
         SuggestionItem(
-            title = stringResource(R.string.ui_browse_the_web_da7afb),
-            icon = Icons.Rounded.Language,
-            prompt = stringResource(R.string.suggestion_browse_web_prompt),
-        ),
-        SuggestionItem(
-            title = stringResource(R.string.ui_check_memory_pressure_2d9600),
+            title = "Debian 容器空间",
+            subtitle = "端侧 Linux 环境闭环",
             icon = Icons.Rounded.Terminal,
             prompt = stringResource(R.string.suggestion_memory_pressure_prompt),
+        ),
+        SuggestionItem(
+            title = "具身自主编排",
+            subtitle = "多工具链与自我校准",
+            icon = Icons.Rounded.AutoAwesome,
+            prompt = stringResource(R.string.suggestion_browse_web_prompt),
         ),
     )
 
@@ -1026,14 +1037,57 @@ private fun EmptyChatState(
                     color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
                 )
             } else {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(palette.primary.copy(alpha = 0.12f))
+                        .border(
+                            width = 1.dp,
+                            brush = Brush.horizontalGradient(
+                                listOf(
+                                    palette.primary.copy(alpha = 0.7f),
+                                    palette.secondary.copy(alpha = 0.4f),
+                                ),
+                            ),
+                            shape = RoundedCornerShape(20.dp),
+                        )
+                        .padding(horizontal = 14.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(7.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(7.dp)
+                            .clip(androidx.compose.foundation.shape.CircleShape)
+                            .background(Color(0xFF10B981))
+                    )
+                    Text(
+                        text = "CORTEX EMBODIED CORE · READY",
+                        style = MiuixTheme.textStyles.body2,
+                        color = palette.primary,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(18.dp))
+
                 Text(
-                    text = stringResource(R.string.ui_how_can_i_help_you_e75391),
+                    text = "Cortex 具身智能主脑",
                     style = MiuixTheme.textStyles.headline1,
                     color = MiuixTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "端侧单主脑决策 · Mirage 离屏调度 · Linux 容器闭环",
+                    style = MiuixTheme.textStyles.body2,
+                    color = palette.textSecondary,
                 )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(26.dp))
 
             AnimatedVisibility(
                 visible = showSuggestions && !isCharacterConversation,
@@ -1054,7 +1108,7 @@ private fun EmptyChatState(
                 ),
             ) {
                 Column(
-                    modifier = Modifier.padding(horizontal = 24.dp),
+                    modifier = Modifier.padding(horizontal = 20.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     suggestions.chunked(2).forEach { rowItems ->
@@ -1080,36 +1134,63 @@ private fun SuggestionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val palette = CortexTheme.palette
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(MiuixTheme.colorScheme.surface)
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        palette.surface,
+                        palette.surfaceHigh.copy(alpha = 0.90f),
+                    )
+                )
+            )
             .border(
-                width = 0.5.dp,
-                color = MiuixTheme.colorScheme.outline.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(12.dp),
+                width = 1.dp,
+                color = palette.primary.copy(alpha = 0.22f),
+                shape = RoundedCornerShape(16.dp),
             )
             .clickable(onClick = onClick)
-            .padding(horizontal = 13.dp, vertical = 12.dp),
+            .padding(horizontal = 14.dp, vertical = 14.dp),
     ) {
-        Icon(
-            imageVector = item.icon,
-            contentDescription = null,
-            modifier = Modifier.size(17.dp),
-            tint = MiuixTheme.colorScheme.onBackground,
-        )
-        Spacer(modifier = Modifier.height(9.dp))
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(RoundedCornerShape(9.dp))
+                .background(palette.primary.copy(alpha = 0.14f)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = item.icon,
+                contentDescription = null,
+                modifier = Modifier.size(17.dp),
+                tint = palette.primary,
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = item.title,
-            style = MiuixTheme.textStyles.body2,
+            style = MiuixTheme.textStyles.body1,
             color = MiuixTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.SemiBold,
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = item.subtitle,
+            style = MiuixTheme.textStyles.footnote2,
+            color = palette.textSecondary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
 
 private data class SuggestionItem(
     val title: String,
+    val subtitle: String,
     val icon: ImageVector,
     val prompt: String,
 )

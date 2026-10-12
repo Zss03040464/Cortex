@@ -841,7 +841,7 @@ private fun AntigravityAccountStatus(
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = email?.ifBlank { "shusenzheng74@gmail.com" } ?: "shusenzheng74@gmail.com",
+                text = email?.ifBlank { "Cortex Local Runtime" } ?: "Cortex Local Runtime",
                 style = MiuixTheme.textStyles.footnote1,
                 fontWeight = FontWeight.SemiBold,
                 color = MiuixTheme.colorScheme.onSurface,
@@ -849,7 +849,7 @@ private fun AntigravityAccountStatus(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = "Google 账号已就绪",
+                text = if (!email.isNullOrBlank()) "主脑授权账号已就绪" else "本地具身引擎已就绪",
                 style = MiuixTheme.textStyles.footnote2,
                 color = MiuixTheme.colorScheme.onSurfaceVariantActions,
             )

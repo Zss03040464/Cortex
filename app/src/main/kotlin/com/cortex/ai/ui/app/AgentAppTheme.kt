@@ -51,8 +51,8 @@ fun AgentAppTheme(
         null
     }
     val keyColor = when {
-        !appearance.monetEnabled -> null
-        appearance.accentColor == AppearanceAccentColor.SYSTEM -> systemSeedColor
+        !appearance.monetEnabled -> Color(0xFF0284C7)
+        appearance.accentColor == AppearanceAccentColor.SYSTEM -> systemSeedColor ?: Color(0xFF0284C7)
         else -> appearance.accentColor.seedColor()
     }
     val controller = remember(appearance, colorSchemeMode, keyColor, isDark) {
@@ -164,7 +164,7 @@ private fun AppearancePaletteStyle.toMiuixPaletteStyle(): ThemePaletteStyle = wh
 }
 
 private fun AppearanceAccentColor.seedColor(): Color = when (this) {
-    AppearanceAccentColor.SYSTEM, AppearanceAccentColor.BLUE -> Color(0xFF3482FF)
+    AppearanceAccentColor.SYSTEM, AppearanceAccentColor.BLUE -> Color(0xFF0284C7)
     AppearanceAccentColor.PURPLE -> Color(0xFF6750A4)
     AppearanceAccentColor.PINK -> Color(0xFFB0006D)
     AppearanceAccentColor.RED -> Color(0xFFBA1A1A)

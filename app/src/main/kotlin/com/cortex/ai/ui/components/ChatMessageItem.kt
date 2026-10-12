@@ -78,6 +78,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap
@@ -561,14 +562,25 @@ private fun UserMessageBubble(
             focusable = true,
             enableUserInput = actionsEnabled,
         ) {
+            val userBubbleBrush = Brush.horizontalGradient(
+                listOf(
+                    palette.messageBubble,
+                    palette.primaryContainer.copy(alpha = 0.75f),
+                )
+            )
+            val userBubbleBorderColor = if (isEditing) {
+                palette.primary
+            } else {
+                palette.primary.copy(alpha = 0.35f)
+            }
             Column(
                 modifier = Modifier
                     .widthIn(max = 320.dp)
                     .clip(userBubbleShape)
-                    .background(palette.surfaceSecondary)
+                    .background(userBubbleBrush)
                     .border(
                         width = if (isEditing) 1.5.dp else 1.dp,
-                        color = if (isEditing) palette.primary else palette.cardBorder,
+                        color = userBubbleBorderColor,
                         shape = userBubbleShape,
                     )
                     .padding(horizontal = 16.dp, vertical = 11.dp),

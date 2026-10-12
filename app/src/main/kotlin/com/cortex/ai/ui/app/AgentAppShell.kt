@@ -276,35 +276,23 @@ private fun AgentTopBar(
                 ) {
                     Row(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(MiuixTheme.colorScheme.primary.copy(alpha = 0.08f))
-                            .border(
-                                width = 0.5.dp,
-                                color = MiuixTheme.colorScheme.primary.copy(alpha = 0.35f),
-                                shape = RoundedCornerShape(8.dp),
-                            )
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(MiuixTheme.colorScheme.onSurface.copy(alpha = 0.06f))
                             .clickable(onClick = onOpenConversationPane)
-                            .padding(horizontal = 10.dp, vertical = 4.dp),
+                            .padding(horizontal = 8.dp, vertical = 3.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(6.dp)
-                                .clip(androidx.compose.foundation.shape.CircleShape)
-                                .background(Color(0xFF10B981))
-                        )
                         Icon(
                             imageVector = Icons.Rounded.Folder,
                             contentDescription = null,
-                            tint = MiuixTheme.colorScheme.primary,
-                            modifier = Modifier.size(13.dp),
+                            tint = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                            modifier = Modifier.size(12.dp),
                         )
                         Text(
                             text = "$displayProj · $displayPath",
                             style = MiuixTheme.textStyles.footnote2,
-                            color = MiuixTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Medium,
+                            color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )

@@ -13,6 +13,8 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -993,25 +995,21 @@ private fun EmptyChatState(
     val suggestions = listOf(
         SuggestionItem(
             title = "全景界面感知",
-            subtitle = "物理主屏分析与规划",
             icon = Icons.Rounded.DocumentScanner,
             prompt = stringResource(R.string.suggestion_analyze_screen_prompt),
         ),
         SuggestionItem(
-            title = "Mirage 离屏副屏",
-            subtitle = "独立虚拟副屏后台执行",
+            title = "Mirage 离屏调度",
             icon = Icons.Rounded.Layers,
             prompt = stringResource(R.string.suggestion_open_wechat_prompt),
         ),
         SuggestionItem(
             title = "Debian 容器空间",
-            subtitle = "端侧 Linux 环境闭环",
             icon = Icons.Rounded.Terminal,
             prompt = stringResource(R.string.suggestion_memory_pressure_prompt),
         ),
         SuggestionItem(
-            title = "具身自主编排",
-            subtitle = "多工具链与自我校准",
+            title = "具身自主任务编排",
             icon = Icons.Rounded.AutoAwesome,
             prompt = stringResource(R.string.suggestion_browse_web_prompt),
         ),
@@ -1019,9 +1017,7 @@ private fun EmptyChatState(
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(bottom = 56.dp),
+            modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (isCharacterConversation) {
@@ -1037,91 +1033,65 @@ private fun EmptyChatState(
                     color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
                 )
             } else {
-                Row(
+                Box(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(palette.primary.copy(alpha = 0.12f))
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(palette.surfaceHigh)
                         .border(
                             width = 1.dp,
-                            brush = Brush.horizontalGradient(
-                                listOf(
-                                    palette.primary.copy(alpha = 0.7f),
-                                    palette.secondary.copy(alpha = 0.4f),
-                                ),
-                            ),
-                            shape = RoundedCornerShape(20.dp),
-                        )
-                        .padding(horizontal = 14.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(7.dp),
+                            color = palette.outlineSoft,
+                            shape = RoundedCornerShape(18.dp),
+                        ),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(7.dp)
-                            .clip(androidx.compose.foundation.shape.CircleShape)
-                            .background(Color(0xFF10B981))
-                    )
-                    Text(
-                        text = "CORTEX EMBODIED CORE · READY",
-                        style = MiuixTheme.textStyles.body2,
-                        color = palette.primary,
-                        fontWeight = FontWeight.SemiBold,
+                    Icon(
+                        imageVector = Icons.Rounded.AutoAwesome,
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp),
+                        tint = palette.onSurface,
                     )
                 }
 
                 Spacer(modifier = Modifier.height(18.dp))
 
                 Text(
-                    text = "Cortex 具身智能主脑",
+                    text = "Cortex",
                     style = MiuixTheme.textStyles.headline1,
                     color = MiuixTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "端侧单主脑决策 · Mirage 离屏调度 · Linux 容器闭环",
+                    text = "端侧具身智能 · 随时待命",
                     style = MiuixTheme.textStyles.body2,
                     color = palette.textSecondary,
                 )
             }
+        }
 
-            Spacer(modifier = Modifier.height(26.dp))
-
-            AnimatedVisibility(
-                visible = showSuggestions && !isCharacterConversation,
-                enter = fadeIn(
-                    animationSpec = tween(durationMillis = 220)
-                ) + slideInVertically(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMediumLow,
-                    ),
-                    initialOffsetY = { it / 3 },
-                ),
-                exit = fadeOut(
-                    animationSpec = tween(durationMillis = 130)
-                ) + slideOutVertically(
-                    animationSpec = tween(durationMillis = 180),
-                    targetOffsetY = { it / 4 },
-                ),
+        AnimatedVisibility(
+            visible = showSuggestions && !isCharacterConversation,
+            enter = fadeIn(tween(200)) + slideInVertically(spring()) { it / 3 },
+            exit = fadeOut(tween(120)) + slideOutVertically(tween(160)) { it / 4 },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 12.dp),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    suggestions.chunked(2).forEach { rowItems ->
-                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            rowItems.forEach { item ->
-                                SuggestionCard(
-                                    item = item,
-                                    onClick = { onSuggestionClick(item.prompt) },
-                                    modifier = Modifier.weight(1f),
-                                )
-                            }
-                        }
-                    }
+                suggestions.forEach { item ->
+                    SuggestionPill(
+                        item = item,
+                        onClick = { onSuggestionClick(item.prompt) },
+                    )
                 }
             }
         }
@@ -1129,68 +1099,43 @@ private fun EmptyChatState(
 }
 
 @Composable
-private fun SuggestionCard(
+private fun SuggestionPill(
     item: SuggestionItem,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val palette = CortexTheme.palette
-    Column(
+    Row(
         modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        palette.surface,
-                        palette.surfaceHigh.copy(alpha = 0.90f),
-                    )
-                )
-            )
+            .clip(RoundedCornerShape(18.dp))
+            .background(palette.surfaceHigh)
             .border(
                 width = 1.dp,
-                color = palette.primary.copy(alpha = 0.22f),
-                shape = RoundedCornerShape(16.dp),
+                color = palette.outlineSoft,
+                shape = RoundedCornerShape(18.dp),
             )
             .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 14.dp),
+            .padding(horizontal = 13.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Box(
-            modifier = Modifier
-                .size(32.dp)
-                .clip(RoundedCornerShape(9.dp))
-                .background(palette.primary.copy(alpha = 0.14f)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = item.icon,
-                contentDescription = null,
-                modifier = Modifier.size(17.dp),
-                tint = palette.primary,
-            )
-        }
-        Spacer(modifier = Modifier.height(10.dp))
+        Icon(
+            imageVector = item.icon,
+            contentDescription = null,
+            modifier = Modifier.size(15.dp),
+            tint = palette.textSecondary,
+        )
         Text(
             text = item.title,
-            style = MiuixTheme.textStyles.body1,
+            style = MiuixTheme.textStyles.body2,
             color = MiuixTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.SemiBold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = item.subtitle,
-            style = MiuixTheme.textStyles.footnote2,
-            color = palette.textSecondary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+            fontWeight = FontWeight.Normal,
         )
     }
 }
 
 private data class SuggestionItem(
     val title: String,
-    val subtitle: String,
     val icon: ImageVector,
     val prompt: String,
 )

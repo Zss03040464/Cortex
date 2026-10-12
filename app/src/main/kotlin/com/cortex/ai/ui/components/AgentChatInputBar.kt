@@ -258,7 +258,7 @@ internal fun AgentChatInputBar(
                     .background(palette.surface)
                     .border(
                         width = 1.dp,
-                        color = palette.primary.copy(alpha = 0.28f),
+                        color = palette.outlineSoft,
                         shape = InputContainerShape,
                     )
                     .padding(horizontal = 12.dp, vertical = 8.dp),

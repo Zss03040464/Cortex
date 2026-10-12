@@ -562,22 +562,21 @@ private fun UserMessageBubble(
             focusable = true,
             enableUserInput = actionsEnabled,
         ) {
-            val userBubbleBrush = Brush.horizontalGradient(
-                listOf(
-                    palette.messageBubble,
-                    palette.primaryContainer.copy(alpha = 0.75f),
-                )
-            )
+            val userBubbleColor = if (isEditing) {
+                palette.surfaceHigher
+            } else {
+                palette.messageBubble
+            }
             val userBubbleBorderColor = if (isEditing) {
                 palette.primary
             } else {
-                palette.primary.copy(alpha = 0.35f)
+                palette.outlineSoft
             }
             Column(
                 modifier = Modifier
                     .widthIn(max = 320.dp)
                     .clip(userBubbleShape)
-                    .background(userBubbleBrush)
+                    .background(userBubbleColor)
                     .border(
                         width = if (isEditing) 1.5.dp else 1.dp,
                         color = userBubbleBorderColor,
